@@ -1,0 +1,19 @@
+name: "B300_SXM"
+# NVIDIA B300 SXM (Blackwell Ultra, GB110 die).
+#   SMs  = 8 GPC * 10 TPC/GPC * 2 SM/TPC - 12 disabled = 148
+#   FBPs = 16 - 0.5 disabled = 15.5
+# Public spec: https://www.nvidia.com/en-us/data-center/dgx-b300/
+# Values not officially published are derived or estimated, as noted per line.
+SRAM_capacity: 134086656  # 127.9MB L2 = 704KB/slice * 12 slices/FBP * 15.5 FBP (published Blackwell L2: 126MB)
+SRAM_byte_per_cycle: 12944  # 186 L2 slices * 64 B/clk read, scaled from L2 clock 2202MHz to GPU 2025MHz (estimated)
+DRAM_capacity: 309237645312  # 288GB HBM3e
+DRAM_byte_per_cycle: 3915.1  # 7.93TB/s @ 2.025GHz; = 3996MHz * 2 * 512b * 15.5 FBP / 8 (published: 8TB/s)
+freq_GHz: 2.025  # boost clock; base clock is 1.5GHz
+MAC_per_cycle_fp32_sm: 18944  # 148 SM * 128 FP32 lanes; @ 2.025GHz: 0.077 PFLOPS
+MAC_per_cycle_tf32_tc: 303104  # 148 SM * 2048; @ 2.025GHz: 1.228 PFLOPS (half of BF16, per SOLAR convention)
+MAC_per_cycle_fp16_tc: 606208  # 148 SM * 4096; @ 2.025GHz: 2.455 PFLOPS dense
+MAC_per_cycle_bf16_tc: 606208  # Same as FP16 - BF16 has identical TC throughput
+MAC_per_cycle_fp8_tc: 1212416  # 148 SM * 8192; @ 2.025GHz: 4.910 PFLOPS dense
+MAC_per_cycle_int8_tc: 1212416  # Same rate as FP8 on Blackwell
+MAC_per_cycle_nvfp4_tc: 3637248  # 148 SM * 24576; @ 2.025GHz: 14.73 PFLOPS dense (published ~15 PFLOPS)
+MAC_per_cycle_fp64_tc: 18944  # 148 SM * 128; @ 2.025GHz: 0.077 PFLOPS (estimated, not officially published)

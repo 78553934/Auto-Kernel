@@ -1,0 +1,27 @@
+{
+  "gpu_name": "Example H100 PCIe",
+  "gpu_peak_tflops_fp16": 756.0,
+  "gpu_peak_bandwidth_gb_s": 2039.0,
+  "top_kernels": [
+    {
+      "rank": 1,
+      "name": "aten::matmul",
+      "op_type": "matmul",
+      "shape_info": "[[1024, 4096], [4096, 4096]]",
+      "gpu_time_ms": 88.8,
+      "avg_time_us": 88.8,
+      "pct_total": 62.3,
+      "roofline": "compute-bound"
+    },
+    {
+      "rank": 2,
+      "name": "aten::layer_norm",
+      "op_type": "layernorm",
+      "shape_info": "[[1, 2048, 4096]]",
+      "gpu_time_ms": 11.7,
+      "avg_time_us": 11.7,
+      "pct_total": 8.2,
+      "roofline": "memory-bound"
+    }
+  ]
+}

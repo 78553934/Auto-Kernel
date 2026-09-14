@@ -1,0 +1,18 @@
+name: "H200_SXM"
+# NVIDIA H200 SXM (Hopper, GH100 die).
+#   SMs  = 8 GPC * 9 TPC/GPC * 2 SM/TPC - 12 disabled = 132
+#   FBPs = 12 - 0.25 disabled = 11.75
+# Public spec: https://www.nvidia.com/en-us/data-center/h200/
+# Values not officially published are derived or estimated, as noted per line.
+SRAM_capacity: 52428800  # 50MB L2 (published; slice math gives 58.75MB physical before harvest)
+SRAM_byte_per_cycle: 5622  # 94 L2 slices * 64 B/clk read, scaled from L2 clock 1710MHz to GPU 1830MHz (estimated)
+DRAM_capacity: 151397597184  # 141GB HBM3e
+DRAM_byte_per_cycle: 2629.9  # 4.81TB/s @ 1.83GHz; = 3200MHz * 2 * 512b * 11.75 FBP / 8 (published: 4.8TB/s)
+freq_GHz: 1.83  # boost clock; base clock is 1.598GHz
+MAC_per_cycle_fp32_sm: 16896  # 132 SM * 128 FP32 lanes; @ 1.83GHz: 0.062 PFLOPS (published FP32: 67 TFLOPS)
+MAC_per_cycle_tf32_tc: 135168  # 132 SM * 1024; @ 1.83GHz: 0.495 PFLOPS dense (published: 494.5 TFLOPS)
+MAC_per_cycle_fp16_tc: 270336  # 132 SM * 2048; @ 1.83GHz: 0.989 PFLOPS dense (published: 989.4 TFLOPS)
+MAC_per_cycle_bf16_tc: 270336  # Same as FP16 - BF16 has identical TC throughput
+MAC_per_cycle_fp8_tc: 540672  # 132 SM * 4096; @ 1.83GHz: 1.979 PFLOPS dense (published: 1979 TFLOPS)
+MAC_per_cycle_int8_tc: 540672  # Same rate as FP8 on Hopper (published: 1979 TOPS)
+MAC_per_cycle_fp64_tc: 8448  # 132 SM * 64; @ 1.83GHz: 0.031 PFLOPS (published FP64: 34 TFLOPS)

@@ -1,0 +1,23 @@
+name: "L40S"
+# NVIDIA L40S (Ada Lovelace, AD102 die).
+#   SMs  = 12 GPC * 6 TPC/GPC * 2 SM/TPC - 2 disabled = 142
+#   FBPs = 6 - 0 disabled = 6
+# Public spec: https://www.nvidia.com/en-us/data-center/l40s/
+# Values not officially published are derived or estimated, as noted per line.
+SRAM_capacity: 100663296  # 96MB L2 = 2048KB/slice * 8 slices/FBP * 6 FBP (matches published 96MB)
+SRAM_byte_per_cycle: 3072  # 48 L2 slices * 64 B/clk read (L2 clock == GPU boost clock on AD102) (estimated)
+DRAM_capacity: 51539607552  # 48GB GDDR6 with ECC
+DRAM_byte_per_cycle: 349.1  # 864GB/s @ 2.475GHz; = 9000MHz * 2 * 64b * 6 FBP / 8 (matches published 864GB/s)
+freq_GHz: 2.475  # boost clock; base clock is 1.46GHz
+MAC_per_cycle_fp32_sm: 18176  # 142 SM * 128 FP32 lanes; @ 2.475GHz: 0.090 PFLOPS (published FP32: 91.6 TFLOPS)
+MAC_per_cycle_tf32_tc: 36352  # 142 SM * 256; @ 2.475GHz: 0.180 PFLOPS. ESTIMATED as half the FP16 rate
+# (SOLAR convention); scaled with FP16 to keep the 2:1 FP16:TF32 ratio.
+# NOTE: the FP16/BF16 and FP8/INT8 rates below are the FP16-accumulate rates. On Ada, FP16 with FP32
+# accumulate runs at half throughput, so NVIDIA's published dense figures (181.05 TFLOPS BF16,
+# 366 TFLOPS FP8) correspond to half the values here.
+MAC_per_cycle_fp16_tc: 72704  # 142 SM * 512; @ 2.475GHz: 0.360 PFLOPS
+MAC_per_cycle_bf16_tc: 72704  # Same as FP16 - BF16 has identical TC throughput
+MAC_per_cycle_fp8_tc: 145408  # 142 SM * 1024; @ 2.475GHz: 0.720 PFLOPS. ESTIMATED from the INT8 rate
+# below (FP8 and INT8 run at the same rate on Ada).
+MAC_per_cycle_int8_tc: 145408  # 142 SM * 1024; @ 2.475GHz: 0.720 POPS
+MAC_per_cycle_fp64_tc: 284  # 142 SM * 2; @ 2.475GHz: 0.0014 PFLOPS (1/64 FP32 rate, estimated)
